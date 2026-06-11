@@ -1,19 +1,23 @@
 services:
   - type: web
     name: openclaw
-    runtime: docker
+    runtime: image
+    repo: https://github.com/Giuse76/openclaw
     plan: starter
-    healthCheckPath: /health
+    dockerfilePath: ./Dockerfile
+    dockerCommand: node dist/index.js gateway
     envVars:
-      - key: OPENCLAW_GATEWAY_PORT
-        value: "8080"
-      - key: OPENCLAW_STATE_DIR
-        value: /data/.openclaw
-      - key: OPENCLAW_WORKSPACE_DIR
-        value: /data/workspace
+      - key: GEMINI_API_KEY
+        sync: false
       - key: OPENCLAW_GATEWAY_TOKEN
         generateValue: true
-    disk:
-      name: openclaw-data
-      mountPath: /data
-      sizeGB: 1
+      - key: OPENCLAW_GATEWAY_PORT
+        value: 10000
+      - key: WALLET_ADDRESS
+        value: 0xaf06372059Fb66339dd1a64a431A8B8e817e1486
+      - key: NETWORK
+        value: base
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=896
+    healthCheckPath: /health
+    autoDeploy: true
